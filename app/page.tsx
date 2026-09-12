@@ -1,5 +1,6 @@
 'use client';
-import { FormEvent, useState } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
+import { FormEvent, useEffect, useState } from 'react';
 const services = [
   ['Recording', 'Capture a performance with clarity and feeling.'],
   ['Mixing & Mastering', 'Make every detail translate.'],
@@ -9,59 +10,110 @@ const services = [
   ['Music & Visual Content', 'Create images that belong to the music.'],
 ];
 const people = [
-  ['ABIDOX KO', 'Member', 'HARDBAZE', '/images/abidox_ko_1789220231558.jpg'],
-  ['ABIDOX KO', 'Member', 'HARDBAZE', '/images/abidox_ko_1789220193669.jpg'],
-  ['PERMA MUSIC', 'Member', 'HARDBAZE', '/images/permamusic_1789220366224.jpg'],
   [
-    'SHARP OFFICIAL',
-    'Member',
-    'HARDBAZE',
-    '/images/sharp_official10_1789220316706.jpg',
+    'Sicab',
+    'Artist|Member',
+    '🇬🇲',
+    'https://framerusercontent.com/images/UWGRF9h1WkkEdpXBExgTwOJsIyg.png?scale-down-to=512&width=1276&height=1274',
   ],
+  ['BS3', 'Artist', '🇬🇲', '/images/bs3.png'],
+  ['Abidox Ko', 'Artist|Member', '🇬🇲', '/images/abidox_ko_1789220231558.jpg'],
+  ['Abidox Ko', 'Member', '🇬🇲', '/images/abidox_ko_1789220193669.jpg'],
+  ['Perma Music', 'Artist|Member', '🇹🇷 🇬🇲', '/images/permamusic_1789220366224.jpg'],
   [
-    'SHARP OFFICIAL',
-    'Member',
-    'HARDBAZE',
+    'Sharp Official',
+    'Artist|Member',
+    '🇬🇲',
     '/images/sharp_official10_1789220318232.jpg',
   ],
   [
-    'HARDBAZE MEMBER',
-    'Member',
-    'HARDBAZE',
-    '/images/WhatsApp Image 2026-01-27 at 23.13.14.jpeg',
+    'Chvpoxxl',
+    'Artist|Producer|Engineer|Member',
+    '🇬🇲 🇩🇪 🇧🇯',
+    '/images/hardbaze-engineer.png',
   ],
-  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/FB_IMG_1788811626598.jpg'],
-  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/FB_IMG_1788811605285.jpg'],
-  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/IMG_1764.JPG'],
-];
-const tracks = [
-  ['After Hours', 'AMARÉ', 'AFRO-FUSION', '03:42'],
-  ['No Signal', 'NIA x KAYO', 'ALTÉ R&B', '02:58'],
-  ['Room 02', 'Hardbaze Session', 'LIVE PERFORMANCE', '04:16'],
+  [
+    'Ouzeyduboiz',
+    'Artist|Producer|Engineer|Visual Creator|Member',
+    '🇬🇲 🇹🇷',
+    '/images/FB_IMG_1788811626598.jpg',
+  ],
 ];
 export default function Home() {
   const [menu, setMenu] = useState(false),
     [filter, setFilter] = useState('All'),
-    [play, setPlay] = useState(-1),
     [form, setForm] = useState('book'),
-    [sent, setSent] = useState(false);
-  const shown =
-    filter === 'All'
-      ? people
-      : people.filter(
-          (p) =>
-            p[1] === filter.slice(0, -1) ||
-            (filter === 'Visual Creators' && p[1] === 'Visual Creator'),
-        );
-  const submit = (e: FormEvent) => {
+    [activeNav, setActiveNav] = useState('');
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle');
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+  const [state, handleSubmit] = useForm('meaqwbbl');
+  const handleNewsletterSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setNewsletterStatus('loading');
+    setNewsletterMessage('');
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to subscribe right now.');
+      }
+
+      setNewsletterStatus('success');
+      setNewsletterMessage("You're on the list.");
+      setNewsletterEmail('');
+    } catch (error) {
+      setNewsletterStatus('error');
+      setNewsletterMessage(
+        error instanceof Error
+          ? error.message
+          : 'Unable to subscribe right now.',
+      );
+    }
   };
+
+  const shown = people
+    .filter(
+      (p) =>
+        filter === 'All' ||
+        p[1].split('|').includes(
+          filter === 'Visual Creators'
+            ? 'Visual Creator'
+            : filter.slice(0, -1),
+        ),
+    )
+    .filter(
+      (person, index, matches) =>
+        matches.findIndex((p) => p[0] === person[0]) === index,
+    );
+  useEffect(() => {
+    const sections = ['studio', 'services', 'sessions', 'artists', 'music', 'about', 'contact']
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting);
+        if (visible) setActiveNav(visible.target.id);
+      },
+      { rootMargin: '-30% 0px -55% 0px' },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
   return (
     <main>
       <header>
         <a className="brand" href="#home">
-          HARD<span>BAZE</span>
+          <img src="/images/hardbaze-logo.jpg" alt="Hardbaze" />
         </a>
         <button className="menu" onClick={() => setMenu(!menu)}>
           {menu ? 'CLOSE' : 'MENU'}
@@ -69,14 +121,19 @@ export default function Home() {
         <nav className={menu ? 'open' : ''}>
           {[
             'Studio',
+            'Services',
             'Sessions',
             'Artists',
-            'Services',
+            'Music',
             'About',
             'Contact',
           ].map((x) => (
             <a
-              onClick={() => setMenu(false)}
+              className={activeNav === x.toLowerCase() ? 'active' : ''}
+              onClick={() => {
+                setActiveNav(x.toLowerCase());
+                setMenu(false);
+              }}
               href={'#' + x.toLowerCase()}
               key={x}
             >
@@ -146,6 +203,7 @@ export default function Home() {
             “Talent is respected here.
             <br />
             Ideas have room to grow.”
+            <cite>— Ouzeyduboiz</cite>
           </blockquote>
         </div>
       </section>
@@ -168,11 +226,14 @@ export default function Home() {
         </div>
       </section>
       <section id="sessions" className="sessions">
-        <div
-          className="sessionimg"
-          role="img"
-          aria-label="Live music performance in warm spotlight"
-        />
+        <div className="sessionimg" aria-hidden="true">
+          <img src="/images/WhatsApp Image 2026-01-27 at 23.13.14.jpeg" alt="" />
+          <img src="/images/hardbaze-engineer.png" alt="" />
+          <img src="/images/abidox_ko_1789220231558.jpg" alt="" />
+          <img src="/images/sharp_official10_1789220318232.jpg" alt="" />
+          <img src="/images/IMG_1764.JPG" alt="" />
+          <img src="/images/FB_IMG_1788811605285.jpg" alt="" />
+        </div>
         <div>
           <p className="eyebrow">HARDBAZE SESSION — EST. 2026</p>
           <h2>
@@ -201,14 +262,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <aside>
-          <small>FEATURED SESSION</small>
-          <strong>04</strong>
-          <b>
-            MAHALIA S.<em>ALTÉ SOUL · 08.09.26</em>
-          </b>
-          <button>▶</button>
-        </aside>
       </section>
       <section id="artists" className="section artists">
         <p className="eyebrow orange">03 — OUR PEOPLE</p>
@@ -224,7 +277,7 @@ export default function Home() {
             'Producers',
             'Engineers',
             'Visual Creators',
-            'Management',
+            'Members',
           ].map((x) => (
             <button
               className={filter === x ? 'active' : ''}
@@ -241,10 +294,12 @@ export default function Home() {
               <article key={p[3]}>
                 <img src={p[3]} alt={'Portrait of ' + p[0]} loading="lazy" />
                 <p>
-                  {p[1]} <span>↗</span>
+                  {p[1].split('|').join(' · ')} <span>↗</span>
                 </p>
-                <h3>{p[0]}</h3>
-                <small>{p[2]}</small>
+                <h3>
+                  {p[0]}
+                  {p[2] && <span className="flag"> {p[2]}</span>}
+                </h3>
               </article>
             ))
           ) : (
@@ -259,36 +314,122 @@ export default function Home() {
           <br />
           Hardbaze.
         </h2>
-        <div className="now">
-          <button onClick={() => setPlay(play === 0 ? -1 : 0)}>
-            {play === 0 ? 'Ⅱ' : '▶'}
-          </button>
-          <b>
-            NOW PLAYING
-            <br />
-            <strong>
-              {tracks[play < 0 ? 0 : play][0]} —{' '}
-              {tracks[play < 0 ? 0 : play][1]}
-            </strong>
-          </b>
-          <div className="progress">
-            <i />
-          </div>
-          <span>01:12</span>
-        </div>
-        <div className="tracks">
-          {tracks.map((t, i) => (
-            <button onClick={() => setPlay(play === i ? -1 : i)} key={t[0]}>
-              <span>0{i + 1}</span>
-              <b>
-                {t[0]}
-                <small>{t[1]}</small>
-              </b>
-              <em>{t[2]}</em>
-              <em>{t[3]}</em>
-              <i>{play === i ? 'Ⅱ' : '▶'}</i>
-            </button>
-          ))}
+        <div className="media-sessions">
+          <section className="audio-session">
+            <p className="eyebrow orange">AUDIO SESSIONS</p>
+            <div className="spotify-release">
+              <p className="eyebrow">LATEST RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/4IDqH6PiymDde1hNIQzCW7?utm_source=generator"
+                title="Latest Hardbaze release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+            <div className="spotify-release">
+              <p className="eyebrow">RECENT RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/2f2Ah07pge0i0SvHszGlCY?utm_source=generator"
+                title="Recent Hardbaze release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+            <div className="spotify-release">
+              <p className="eyebrow">RECENT RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/3oG4ClHwdaizZe8xMr5UVI?utm_source=generator"
+                title="Recent Hardbaze release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+            <div className="spotify-release">
+              <p className="eyebrow">RECENT RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/3rOGTyWx43PNm9XwK1GXPd?utm_source=generator"
+                title="Recent Hardbaze release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+            <div className="spotify-release">
+              <p className="eyebrow">ABIDOX KO — RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/7arn1UUep8NXmD4gg5P13i?utm_source=generator"
+                title="Abidox Ko release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+          </section>
+          <section className="video-session">
+            <p className="eyebrow orange">VIDEO SESSIONS</p>
+            <a
+              className="video-preview"
+              href="https://youtu.be/Xy0Kj0KrykA?si=m0grcvB_Rgd_ev-x"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="https://i.ytimg.com/vi/Xy0Kj0KrykA/hqdefault.jpg"
+                alt="Hardbaze video session preview"
+              />
+              <span>
+                <small>VIDEO SESSION</small>
+                Watch the latest session
+                <b>Watch on YouTube ↗</b>
+              </span>
+            </a>
+            <a
+              className="video-preview"
+              href="https://youtu.be/Cjhv0c_2nyA?si=kGpDpC5RM9XiRM0-"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="https://i.ytimg.com/vi/Cjhv0c_2nyA/hqdefault.jpg"
+                alt="Hardbaze video session preview"
+              />
+              <span>
+                <small>VIDEO SESSION</small>
+                Watch the latest session
+                <b>Watch on YouTube ↗</b>
+              </span>
+            </a>
+            <a
+              className="video-preview"
+              href="https://youtu.be/9H64KqcvWI0?si=gacLZAtTjg4q2leu"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="https://i.ytimg.com/vi/djMUO-a3s7Q/hqdefault.jpg"
+                alt="Upcoming Hardbaze release preview"
+              />
+              <span>
+                <small>UPCOMING RELEASE</small>
+                Preview the next session
+                <b>Watch on YouTube ↗</b>
+              </span>
+            </a>
+            <a
+              className="video-preview"
+              href="https://youtu.be/AMJSlivfyp8?si=MhFR7tNyjnlAHd3J"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="https://i.ytimg.com/vi/AMJSlivfyp8/hqdefault.jpg"
+                alt="Hardbaze video session preview"
+              />
+              <span>
+                <small>VIDEO SESSION</small>
+                Watch the latest session
+                <b>Watch on YouTube ↗</b>
+              </span>
+            </a>
+          </section>
         </div>
       </section>
       <section id="about" className="vision">
@@ -298,22 +439,23 @@ export default function Home() {
           <br />
           deserves <i>room</i> to move.
         </h2>
-        <p>
-          Our vision: to build a movement where African talent can grow,
-          connect, and reach a wider audience.
-        </p>
-        <div>
-          {[
-            'Artists supported',
-            'Sessions recorded',
-            'Releases completed',
-            'Audience reached',
-          ].map((x) => (
-            <span key={x}>
+          <p>
+            Our vision: to build a movement where African talent can grow,
+            connect, and reach a wider audience.
+          </p>
+          <div>
+            {[
+              ['100', '+', 'Artists supported'],
+              ['100', '+', 'Sessions recorded'],
+              ['100', '+', 'Releases completed'],
+              ['17K', '', 'Audience reached'],
+            ].map(([value, suffix, label]) => (
+            <span key={label}>
               <b>
-                00<i>+</i>
+                  {value}
+                  {suffix && <i>{suffix}</i>}
               </b>
-              <small>{x}</small>
+              <small>{label}</small>
             </span>
           ))}
         </div>
@@ -335,7 +477,6 @@ export default function Home() {
               className={form === 'book' ? 'active' : ''}
               onClick={() => {
                 setForm('book');
-                setSent(false);
               }}
             >
               Book a studio session
@@ -344,60 +485,100 @@ export default function Home() {
               className={form === 'apply' ? 'active' : ''}
               onClick={() => {
                 setForm('apply');
-                setSent(false);
               }}
             >
               Apply for a session
             </button>
+            <button
+              className={form === 'feature' ? 'active' : ''}
+              onClick={() => {
+                setForm('feature');
+              }}
+            >
+              Request a feature / repost
+            </button>
           </div>
         </div>
-        {sent ? (
+        {state.succeeded ? (
           <div className="success">
             <p>RECEIVED</p>
             <h3>Thank you.</h3>
             <p>
               Your details are with the Hardbaze team. We’ll be in touch soon.
             </p>
-            <button onClick={() => setSent(false)}>
+            <button onClick={() => window.location.reload()}>
               Send another request →
             </button>
           </div>
         ) : (
-          <form onSubmit={submit}>
+          <form onSubmit={handleSubmit}>
+            <input type="hidden" name="request_type" value={form} />
             <label>
               Name
-              <input required placeholder="Your full name" />
+              <input required name="name" placeholder="Your full name" />
             </label>
             <label>
               Artist / stage name
-              <input required placeholder="How should we know you?" />
+              <input required name="stage_name" placeholder="How should we know you?" />
             </label>
             <label>
               Email
-              <input required type="email" placeholder="you@email.com" />
+              <input required type="email" name="email" placeholder="you@email.com" />
+              <ValidationError field="email" prefix="Email" errors={state.errors} />
             </label>
             <label>
-              {form === 'book' ? 'Service required' : 'Genre'}
-              <select required defaultValue="">
+              {form === 'book'
+                ? 'Service required'
+                : form === 'apply'
+                  ? 'Genre'
+                  : 'Type of work'}
+              <select
+                required
+                name={form === 'book' ? 'service_required' : form === 'apply' ? 'genre' : 'type_of_work'}
+                defaultValue=""
+              >
                 <option value="" disabled>
                   Select one
                 </option>
                 {(form === 'book'
                   ? services.map((s) => s[0])
-                  : ['Afrobeats', 'Hip-hop', 'R&B / Soul', 'Alternative']
+                  : form === 'apply'
+                    ? ['Afrobeats', 'Hip-hop', 'R&B / Soul', 'Alternative']
+                    : ['Music release', 'Music video', 'Freestyle', 'Visual art', 'Other']
                 ).map((x) => (
                   <option key={x}>{x}</option>
                 ))}
               </select>
             </label>
+            {form === 'feature' && (
+              <label>
+                Link to your work
+                <input required type="url" name="work_link" placeholder="Spotify, YouTube, Instagram…" />
+              </label>
+            )}
             <label className="full">
               {form === 'book'
                 ? 'Project description'
-                : 'Why do you want to perform?'}
-              <textarea required placeholder="Give us the essentials…" />
+                : form === 'apply'
+                  ? 'Why do you want to perform?'
+                  : 'Why should we feature it?'}
+              <textarea
+                required
+                name="message"
+                placeholder={
+                  form === 'feature'
+                    ? 'Tell us about the release, your story, and the requested feature or repost…'
+                    : 'Give us the essentials…'
+                }
+              />
+              <ValidationError field="message" prefix="Message" errors={state.errors} />
             </label>
-            <button className="button">
-              {form === 'book' ? 'Send booking request' : 'Submit application'}{' '}
+            <button className="button" disabled={state.submitting}>
+              {form === 'book'
+                ? 'Send booking request'
+                : form === 'apply'
+                  ? 'Submit application'
+                  : 'Send feature request'}{' '}
               ↗
             </button>
           </form>
@@ -414,37 +595,160 @@ export default function Home() {
           New sessions, releases, events and opportunities — in your inbox, when
           it matters.
         </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            alert('You’re on the list.');
-          }}
-        >
+        <form onSubmit={handleNewsletterSubmit}>
           <input
             required
             type="email"
             placeholder="Your email address"
             aria-label="Email address"
+            value={newsletterEmail}
+            onChange={(e) => {
+              setNewsletterEmail(e.target.value);
+              if (newsletterStatus !== 'idle') {
+                setNewsletterStatus('idle');
+                setNewsletterMessage('');
+              }
+            }}
           />
-          <button>→</button>
+          <button disabled={newsletterStatus === 'loading'}>
+            {newsletterStatus === 'loading' ? '...' : '→'}
+          </button>
         </form>
+        {newsletterMessage && (
+          <small
+            style={{
+              display: 'block',
+              marginTop: '0.75rem',
+              color:
+                newsletterStatus === 'success' ? '#7ee7a2' : '#f6b3b3',
+            }}
+          >
+            {newsletterMessage}
+          </small>
+        )}
         <small>
           By subscribing, you agree to receive updates from Hardbaze.
         </small>
       </section>
-      <footer>
-        <a className="brand" href="#home">
-          HARD<span>BAZE</span>
-        </a>
-        <p>
-          Sound, vision and community for the next generation of African
-          artists.
+      <section className="testimonials section">
+        <p className="eyebrow orange">ARTIST FEEDBACK</p>
+        <h2>
+          Built with
+          <br />
+          the artists.
+        </h2>
+        <p className="testimonial-note">
+          Verified feedback from artists in the Hardbaze community.
         </p>
-        <div>
+        <div className="testimonial-grid">
+          <article>
+            <span>★★★★★</span>
+            <p>
+              “Hardbaze completely changed my music journey. The platform gave me the
+              exposure I needed, helped my sound reach new listeners, and opened doors
+              I never thought possible. More than just a music platform, Hardbaze gave
+              me the confidence and opportunity to grow as an artist. I’m truly grateful
+              to be part of this movement.”
+            </p>
+            <small>Chvpoxxl · Artist</small>
+          </article>
+          <article>
+            <span>★★★★★</span>
+            <p>
+              “Hardbaze has played a major role in my music journey. It gave my music
+              greater visibility, connected me with new listeners, and helped me build
+              a stronger presence as an artist. The exposure and support I received
+              through the platform have been truly valuable. Hardbaze isn’t just
+              showcasing music—it’s helping artists like me grow and be heard.”
+            </p>
+            <small>Sharp Official · Artist</small>
+          </article>
+          <article>
+            <span>★★★★★</span>
+            <p>
+              “Working with Hardbaze from The Gambia has elevated my music career to a
+              whole new level. The platform helped my sound reach audiences beyond
+              borders, increased my visibility, and connected me with opportunities I
+              once thought were out of reach. Hardbaze believed in my talent and gave
+              me a powerful platform to grow, be heard, and establish myself as an artist.”
+            </p>
+            <small>Sicab · Artist</small>
+          </article>
+        </div>
+      </section>
+      <footer>
+        <div className="footer-brand">
+          <a className="brand" href="#home">
+            <img src="/images/hardbaze-logo.jpg" alt="Hardbaze" />
+          </a>
+          <p>
+            Sound, vision and community for the next generation of African
+            artists.
+          </p>
+        </div>
+        <div className="footer-links">
+          <span>Explore</span>
           <a href="#studio">Studio</a>
           <a href="#sessions">Sessions</a>
           <a href="#book">Booking</a>
-          <a href="#contact">Instagram ↗</a>
+          <a
+            href="https://www.instagram.com/hardbaze_?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Instagram ↗
+          </a>
+          <a href="https://www.youtube.com/@thehardbazesession" target="_blank" rel="noreferrer">
+            YouTube ↗
+          </a>
+        </div>
+        <div className="artist-socials">
+          <span>Artist socials</span>
+          <a
+            href="https://www.instagram.com/ouzeyduboiz?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Ouzeyduboiz ↗
+          </a>
+          <a
+            href="https://www.instagram.com/bs3official1/?utm_source=ig_web_button_share_sheet"
+            target="_blank"
+            rel="noreferrer"
+          >
+            BS3 ↗
+          </a>
+          <a
+            href="https://www.instagram.com/permamusic?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Perma Music ↗
+          </a>
+          <a
+            href="https://www.instagram.com/sharpofficial_10?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sharp Official ↗
+          </a>
+          <a
+            href="https://www.instagram.com/sicab_official?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sicab ↗
+          </a>
+          <a
+            href="https://www.instagram.com/abidox_ko?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            Abidox Ko ↗
+          </a>
+          <a href="https://www.instagram.com/chvpoxxl/" target="_blank" rel="noreferrer">
+            Chvpoxxl ↗
+          </a>
         </div>
         <small>© 2026 Hardbaze. All rights reserved. Privacy · Impressum</small>
       </footer>

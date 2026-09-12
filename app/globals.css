@@ -9,7 +9,8 @@ body {
   margin: 0;
   background: #121110;
   color: #f2eee5;
-  font-family: Arial, sans-serif;
+  font-family: 'Helvetica Neue', 'Avenir Next', Avenir, Arial, sans-serif;
+  letter-spacing: 0.005em;
 }
 button,
 input,
@@ -22,18 +23,22 @@ button {
   cursor: pointer;
 }
 .brand {
-  font-size: 21px;
-  font-weight: 900;
-  letter-spacing: -1.5px;
-  color: #f3eee6;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
+}
+.brand img {
+  display: block;
+  width: 88px;
+  height: 72px;
+  object-fit: contain;
 }
 .brand span,
 .orange {
-  color: #f15a24;
+  color: #7b1e2b;
 }
 header {
-  height: 78px;
+  height: 88px;
   padding: 0 5vw;
   display: flex;
   justify-content: space-between;
@@ -57,9 +62,35 @@ nav a {
   font-size: 10px;
   letter-spacing: 0.1em;
 }
+nav a:not(.button) {
+  position: relative;
+  padding: 10px 0;
+  transition: color 0.22s ease;
+}
+nav a:not(.button)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 1px;
+  background: #b73a50;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.22s ease;
+}
+nav a:not(.button):hover,
+nav a:not(.button).active {
+  color: #fff;
+}
+nav a:not(.button):hover::after,
+nav a:not(.button).active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
 .button {
   display: inline-block;
-  background: #f15a24;
+  background: #7b1e2b;
   border: 0;
   color: #fff;
   padding: 15px 18px;
@@ -87,15 +118,13 @@ nav a {
   position: relative;
   overflow: hidden;
 }
-.heroimg,
-.sessionimg {
+.heroimg {
   position: absolute;
   inset: 0;
   z-index: -1;
   background:
     linear-gradient(90deg, #121110f5, #12111060),
-    url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1900&q=85')
-      center/cover;
+    url('/images/hero-sound-meets-vision.jpg') center/cover;
 }
 .hero-copy {
   max-width: 800px;
@@ -109,9 +138,9 @@ nav a {
 .hero h1,
 h2 {
   font-size: clamp(50px, 8vw, 130px);
-  line-height: 0.88;
-  letter-spacing: -0.075em;
-  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.065em;
+  text-transform: none;
   margin: 0;
   font-weight: 850;
 }
@@ -147,7 +176,7 @@ h2 i {
   position: absolute;
   right: 8vw;
   bottom: 13vh;
-  color: #f15a24;
+  color: #7b1e2b;
   letter-spacing: 3px;
   transform: rotate(90deg);
   font-size: 35px;
@@ -183,8 +212,7 @@ h2 i {
   min-height: 460px;
   background:
     linear-gradient(#0002, #0008),
-    url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=85')
-      center/cover;
+    url('/images/studio-feature.png') center/cover;
   display: flex;
   align-items: flex-end;
   padding: 38px;
@@ -193,8 +221,17 @@ h2 i {
   font: italic 25px Georgia;
   margin: 0;
 }
+.studioimg cite {
+  display: block;
+  margin-top: 14px;
+  font: 700 10px Arial, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 .services {
-  background: #181615;
+  background:
+    linear-gradient(rgba(24, 22, 21, 0.7), rgba(24, 22, 21, 0.8)),
+    url('/images/gambia-flag-with-big-folds-waving-close-up-studio-light-indoors-official-symbols-colors-banner_76080-16339.jpg.avif') center/cover;
 }
 .servicegrid {
   display: grid;
@@ -211,7 +248,7 @@ h2 i {
   transition: 0.2s;
 }
 .servicegrid article:hover {
-  background: #f15a24;
+  background: #7b1e2b;
 }
 .servicegrid span {
   font-size: 10px;
@@ -235,6 +272,49 @@ h2 i {
   text-decoration: none;
   font-size: 20px;
 }
+.testimonials {
+  background: #eee9df;
+  color: #191714;
+}
+.testimonials h2 {
+  font-size: clamp(40px, 5vw, 78px);
+}
+.testimonial-note {
+  max-width: 500px;
+  margin: 24px 0 42px;
+  color: #625b54;
+  line-height: 1.55;
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #bfb7ad;
+  border-left: 1px solid #bfb7ad;
+}
+.testimonial-grid article {
+  min-height: 230px;
+  padding: 28px;
+  border-right: 1px solid #bfb7ad;
+  border-bottom: 1px solid #bfb7ad;
+  display: flex;
+  flex-direction: column;
+}
+.testimonial-grid article > span {
+  color: #7b1e2b;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+.testimonial-grid p {
+  margin: 45px 0 28px;
+  font: italic 22px/1.3 Georgia, serif;
+}
+.testimonial-grid small {
+  margin-top: auto;
+  color: #756e65;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .sessions {
   min-height: 720px;
   padding: 100px 8vw;
@@ -244,10 +324,30 @@ h2 i {
   overflow: hidden;
 }
 .sessionimg {
-  background:
-    linear-gradient(90deg, #121110e8, #12111044),
-    url('https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1900&q=85')
-      center/cover;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  background: #090807;
+}
+.sessionimg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #121110f7 0%, #121110d4 44%, #12111055 100%);
+}
+.sessionimg img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}
+.sessions > div:not(.sessionimg),
+.sessions aside {
+  position: relative;
+  z-index: 1;
 }
 .sessions h2 {
   font-size: clamp(42px, 6vw, 100px);
@@ -326,24 +426,35 @@ h2 i {
   object-fit: cover;
 }
 .crew p {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 13px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  margin: 15px 0 0;
 }
 .crew p span {
   float: right;
-  color: #f15a24;
+  color: #7b1e2b;
 }
 .crew h3 {
-  margin: 7px 0 4px;
-  font-size: 27px;
-  letter-spacing: -0.06em;
+  margin: 8px 0 4px;
+  font-size: clamp(23px, 2.15vw, 31px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
 }
-.crew small {
-  font-size: 9px;
-  color: #756e65;
+.crew h3 .flag {
+  font-size: 20px;
+  line-height: 1;
   letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.crew h3 a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.crew h3 a:hover {
+  color: #7b1e2b;
 }
 .music {
   background: #121110;
@@ -356,12 +467,79 @@ h2 i {
   gap: 17px;
   margin: 45px 0 18px;
 }
+.media-sessions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 55px;
+  margin-top: 42px;
+}
+.audio-session,
+.video-session {
+  min-width: 0;
+}
+.spotify-release .eyebrow {
+  margin-bottom: 12px;
+}
+.spotify-release + .spotify-release {
+  margin-top: 24px;
+}
+.spotify-release iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  height: 152px;
+}
+.video-preview {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  background: #090807;
+}
+.video-preview img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: transform 0.25s ease;
+}
+.video-preview:hover img {
+  transform: scale(1.03);
+}
+.video-preview + .video-preview {
+  margin-top: 20px;
+}
+.video-preview span {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px;
+  background: linear-gradient(transparent, #090807e8);
+  font-size: 17px;
+  font-weight: 700;
+}
+.video-preview small,
+.video-preview b {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+.video-preview small {
+  color: #e3d8d5;
+}
+.video-preview b {
+  color: #b73a50;
+}
 .now button {
   height: 40px;
   width: 40px;
   border: 0;
   border-radius: 50%;
-  background: #f15a24;
+  background: #7b1e2b;
   color: #fff;
 }
 .now b {
@@ -382,7 +560,7 @@ h2 i {
   display: block;
   width: 29%;
   height: 100%;
-  background: #f15a24;
+  background: #7b1e2b;
 }
 .now span {
   font-size: 10px;
@@ -399,7 +577,7 @@ h2 i {
   text-align: left;
 }
 .tracks button:hover {
-  color: #f15a24;
+  color: #7b1e2b;
 }
 .tracks span,
 .tracks em,
@@ -448,7 +626,7 @@ h2 i {
   letter-spacing: -0.08em;
 }
 .vision b i {
-  color: #f15a24;
+  color: #7b1e2b;
   font-style: normal;
 }
 .vision small {
@@ -461,8 +639,15 @@ h2 i {
   display: grid;
   grid-template-columns: 0.85fr 1fr;
   gap: 9vw;
-  background: #f15a24;
-  color: #191714;
+  background: linear-gradient(135deg, #681424, #7b1e2b 55%, #57101d);
+  color: #fff8f4;
+}
+.booking > div > p {
+  color: #f2d9df;
+  font-size: 16px;
+}
+.booking .eyebrow {
+  color: #f5c0cb;
 }
 .booking form {
   display: grid;
@@ -470,7 +655,8 @@ h2 i {
   gap: 18px;
 }
 .booking label {
-  font-size: 9px;
+  color: #fff8f4;
+  font-size: 10px;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.1em;
@@ -485,10 +671,26 @@ h2 i {
   width: 100%;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid #52271c;
+  border-bottom: 1px solid #e8a6b3;
   padding: 10px 0;
   margin-top: 8px;
   outline: none;
+  color: #fff;
+  font-size: 15px;
+}
+.booking input::placeholder,
+.booking textarea::placeholder {
+  color: #efd2d9;
+  opacity: 0.85;
+}
+.booking select option {
+  background: #57101d;
+  color: #fff;
+}
+.booking input:focus,
+.booking select:focus,
+.booking textarea:focus {
+  border-color: #fff;
 }
 .booking textarea {
   height: 85px;
@@ -498,6 +700,12 @@ h2 i {
   grid-column: 1/-1;
   justify-self: start;
   background: #191714;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.booking form .button:hover {
+  background: #fff8f4;
+  color: #57101d;
+  transform: translateY(-2px);
 }
 .tabs {
   display: flex;
@@ -508,14 +716,15 @@ h2 i {
 .success button {
   border: 0;
   background: transparent;
-  border-bottom: 1px solid #6d301f;
+  border-bottom: 1px solid #d18b99;
   padding: 5px 0;
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 .tabs .active {
-  border-color: #191714;
+  border-color: #fff;
+  color: #fff;
 }
 .success {
   padding-top: 20px;
@@ -563,9 +772,9 @@ h2 i {
 }
 footer {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.1fr 0.7fr 1.65fr;
   gap: 25px;
-  padding: 60px 8vw 25px;
+  padding: 34px 8vw 18px;
 }
 footer p {
   color: #aaa197;
@@ -587,17 +796,62 @@ footer small {
   font-size: 9px;
   letter-spacing: 0.1em;
 }
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.footer-links span,
+.artist-socials {
+  color: #8c857b;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.artist-socials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  column-gap: 20px;
+  row-gap: 10px;
+}
+.artist-socials span {
+  grid-column: 1/-1;
+  color: #8c857b;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.artist-socials a {
+  color: #d6cec2;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
 footer small {
   grid-column: 1/-1;
   border-top: 1px solid #ffffff24;
-  margin-top: 35px;
-  padding-top: 18px;
+  margin-top: 18px;
+  padding-top: 14px;
   color: #8c857b;
 }
 @media (max-width: 760px) {
   header {
-    height: 65px;
+    height: 70px;
     padding: 0 6vw;
+  }
+  .brand img {
+    width: 68px;
+    height: 56px;
   }
   .menu {
     display: block;
@@ -605,7 +859,7 @@ footer small {
   nav {
     display: none;
     position: absolute;
-    top: 65px;
+    top: 70px;
     left: 0;
     width: 100%;
     background: #121110;
@@ -640,6 +894,9 @@ footer small {
     grid-template-columns: 1fr;
     margin-top: 40px;
   }
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
   .servicegrid article {
     min-height: 200px;
     border-right: 0;
@@ -665,6 +922,10 @@ footer small {
   }
   .now {
     flex-wrap: wrap;
+  }
+  .media-sessions {
+    grid-template-columns: 1fr;
+    gap: 45px;
   }
   .now b {
     min-width: 210px;
@@ -693,7 +954,8 @@ footer small {
   }
   footer {
     grid-template-columns: 1fr;
-    padding: 45px 7vw 20px;
+    gap: 18px;
+    padding: 30px 7vw 16px;
   }
   footer small {
     margin-top: 15px;
