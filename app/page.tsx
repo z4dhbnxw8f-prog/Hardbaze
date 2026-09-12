@@ -488,6 +488,15 @@ export default function Home() {
             Tell us what you’re working on. We’ll get back to you with the right
             next step.
           </p>
+          <a
+            className="whatsapp-team"
+            href="https://chat.whatsapp.com/EPK1eGpI2kwA54CHXhAkvF?mode=gi_t"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>WHATSAPP COMMUNITY</span>
+            Connect directly with the team <b>↗</b>
+          </a>
           <div className="tabs">
             <button
               className={form === 'book' ? 'active' : ''}
