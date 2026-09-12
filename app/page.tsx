@@ -17,7 +17,7 @@ const people = [
     'https://framerusercontent.com/images/UWGRF9h1WkkEdpXBExgTwOJsIyg.png?scale-down-to=512&width=1276&height=1274',
   ],
   ['BS3', 'Artist', '🇬🇲', '/images/bs3.png'],
-  ['Baysic', 'Artist|Member', '🇬🇲', '/images/baysic.png'],
+  ['Amadou 5.0', 'Artist|Member', '🇬🇲', '/images/baysic.png'],
   ['Abidox Ko', 'Artist|Member', '🇲🇱', '/images/abidox_ko_1789220231558.jpg'],
   ['Abidox Ko', 'Member', '🇲🇱', '/images/abidox_ko_1789220193669.jpg'],
   ['Perma Music', 'Artist|Member', '🇹🇷 🇬🇲', '/images/permamusic_1789220366224.jpg'],
@@ -35,7 +35,7 @@ const people = [
   ],
   [
     'Ouzeyduboiz',
-    'Artist|Producer|Engineer|Visual Creator|Member',
+    'Artist|Producer|Visual Creator|Member',
     '🇬🇲 🇹🇷',
     '/images/FB_IMG_1788811626598.jpg',
   ],
