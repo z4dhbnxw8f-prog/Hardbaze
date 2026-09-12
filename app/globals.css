@@ -182,7 +182,7 @@ h2 i {
   font-size: 35px;
 }
 .section {
-  padding: 125px 8vw;
+  padding: 96px 8vw;
 }
 .studio {
   display: grid;
@@ -209,7 +209,7 @@ h2 i {
   color: #191714;
 }
 .studioimg {
-  min-height: 460px;
+  min-height: 420px;
   background:
     linear-gradient(#0002, #0008),
     url('/images/studio-feature.png') center/cover;
@@ -229,26 +229,75 @@ h2 i {
   text-transform: uppercase;
 }
 .services {
-  background:
-    linear-gradient(rgba(24, 22, 21, 0.7), rgba(24, 22, 21, 0.8)),
-    url('/images/gambia-flag-with-big-folds-waving-close-up-studio-light-indoors-official-symbols-colors-banner_76080-16339.jpg.avif') center/cover;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #181615;
+}
+.services > :not(.flag-slideshow) {
+  position: relative;
+  z-index: 1;
+}
+.flag-slideshow,
+.flag-slideshow::after,
+.flag-slide {
+  position: absolute;
+  inset: 0;
+}
+.flag-slideshow {
+  z-index: 0;
+}
+.flag-slideshow::after {
+  content: '';
+  background: rgba(10, 9, 8, 0.62);
+}
+.flag-slide {
+  background: center / cover no-repeat;
+  opacity: 0;
+  animation: flag-slideshow 20s infinite;
+}
+.flag-slide.gambia {
+  background-image: url('/images/gambia-flag-with-big-folds-waving-close-up-studio-light-indoors-official-symbols-colors-banner_76080-16339.jpg.avif');
+}
+.flag-slide.mali {
+  background-image: url('/images/mali.jpg');
+  animation-delay: 5s;
+}
+.flag-slide.turkey {
+  background-image: url('/images/turkish-flag.jpg');
+  animation-delay: 10s;
+}
+.flag-slide.benin {
+  background-image: url('/images/benin-flag.jpeg');
+  animation-delay: 15s;
+}
+@keyframes flag-slideshow {
+  0%, 20% { opacity: 1; }
+  25%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flag-slide { animation: none; }
+  .flag-slide.gambia { opacity: 1; }
 }
 .servicegrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin-top: 60px;
+  margin-top: 46px;
   border-top: 1px solid #ffffff2d;
 }
 .servicegrid article {
-  min-height: 260px;
+  min-height: 235px;
   padding: 22px;
   border-right: 1px solid #ffffff2d;
   border-bottom: 1px solid #ffffff2d;
   position: relative;
-  transition: 0.2s;
+  background: rgba(18, 17, 16, 0.18);
+  transition: background 0.25s ease, transform 0.25s ease;
 }
 .servicegrid article:hover {
-  background: #7b1e2b;
+  background: rgba(80, 14, 28, 0.82);
+  transform: translateY(-3px);
 }
 .servicegrid span {
   font-size: 10px;
@@ -257,7 +306,7 @@ h2 i {
 .servicegrid h3 {
   font-size: 23px;
   letter-spacing: -0.04em;
-  margin: 60px 0 10px;
+  margin: 48px 0 10px;
 }
 .servicegrid p {
   font-size: 13px;
@@ -281,7 +330,7 @@ h2 i {
 }
 .testimonial-note {
   max-width: 500px;
-  margin: 24px 0 42px;
+  margin: 20px 0 34px;
   color: #625b54;
   line-height: 1.55;
 }
@@ -292,8 +341,8 @@ h2 i {
   border-left: 1px solid #bfb7ad;
 }
 .testimonial-grid article {
-  min-height: 230px;
-  padding: 28px;
+  min-height: 210px;
+  padding: 25px;
   border-right: 1px solid #bfb7ad;
   border-bottom: 1px solid #bfb7ad;
   display: flex;
@@ -305,7 +354,7 @@ h2 i {
   letter-spacing: 0.12em;
 }
 .testimonial-grid p {
-  margin: 45px 0 28px;
+  margin: 34px 0 24px;
   font: italic 22px/1.3 Georgia, serif;
 }
 .testimonial-grid small {
@@ -316,8 +365,8 @@ h2 i {
   text-transform: uppercase;
 }
 .sessions {
-  min-height: 720px;
-  padding: 100px 8vw;
+  min-height: 640px;
+  padding: 82px 8vw;
   display: flex;
   align-items: center;
   position: relative;
@@ -401,7 +450,7 @@ h2 i {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin: 40px 0;
+  margin: 30px 0;
 }
 .filters button {
   background: transparent;
@@ -441,6 +490,10 @@ h2 i {
   font-weight: 750;
   letter-spacing: -0.045em;
   line-height: 1.02;
+}
+.crew h3.ouzey-name {
+  font-size: clamp(20px, 1.8vw, 27px);
+  white-space: nowrap;
 }
 .crew h3 .flag {
   font-size: 20px;
@@ -600,7 +653,7 @@ h2 i {
 }
 .vision {
   text-align: center;
-  padding: 145px 8vw;
+  padding: 112px 8vw;
   background:
     linear-gradient(#121110d8, #121110e8),
     url('https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1900&q=80')
@@ -616,7 +669,7 @@ h2 i {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid #ffffff35;
-  margin-top: 65px;
+  margin-top: 48px;
   padding-top: 20px;
   text-align: left;
 }
@@ -734,7 +787,7 @@ h2 i {
   margin: 10px 0;
 }
 .newsletter {
-  padding: 125px 8vw;
+  padding: 96px 8vw;
   background: #e9e4da;
   color: #191714;
 }
@@ -880,7 +933,7 @@ footer small {
     display: none;
   }
   .section {
-    padding: 80px 7vw;
+    padding: 68px 7vw;
   }
   .studio,
   .booking {
@@ -905,8 +958,8 @@ footer small {
     margin-top: 35px;
   }
   .sessions {
-    padding: 80px 7vw 175px;
-    min-height: 640px;
+    padding: 68px 7vw 155px;
+    min-height: 590px;
   }
   .sessions aside {
     left: 7vw;
@@ -940,7 +993,10 @@ footer small {
     display: none;
   }
   .vision {
-    padding: 90px 7vw;
+    padding: 72px 7vw;
+  }
+  .newsletter {
+    padding: 68px 7vw;
   }
   .vision > div {
     grid-template-columns: 1fr 1fr;

@@ -17,8 +17,9 @@ const people = [
     'https://framerusercontent.com/images/UWGRF9h1WkkEdpXBExgTwOJsIyg.png?scale-down-to=512&width=1276&height=1274',
   ],
   ['BS3', 'Artist', '🇬🇲', '/images/bs3.png'],
-  ['Abidox Ko', 'Artist|Member', '🇬🇲', '/images/abidox_ko_1789220231558.jpg'],
-  ['Abidox Ko', 'Member', '🇬🇲', '/images/abidox_ko_1789220193669.jpg'],
+  ['Baysic', 'Artist|Member', '🇬🇲', '/images/baysic.png'],
+  ['Abidox Ko', 'Artist|Member', '🇲🇱', '/images/abidox_ko_1789220231558.jpg'],
+  ['Abidox Ko', 'Member', '🇲🇱', '/images/abidox_ko_1789220193669.jpg'],
   ['Perma Music', 'Artist|Member', '🇹🇷 🇬🇲', '/images/permamusic_1789220366224.jpg'],
   [
     'Sharp Official',
@@ -208,6 +209,12 @@ export default function Home() {
         </div>
       </section>
       <section id="services" className="section services">
+        <div className="flag-slideshow" aria-hidden="true">
+          <span className="flag-slide gambia" />
+          <span className="flag-slide mali" />
+          <span className="flag-slide turkey" />
+          <span className="flag-slide benin" />
+        </div>
         <p className="eyebrow orange">02 — WHAT WE DO</p>
         <h2>
           Bring the idea.
@@ -296,7 +303,7 @@ export default function Home() {
                 <p>
                   {p[1].split('|').join(' · ')} <span>↗</span>
                 </p>
-                <h3>
+                <h3 className={p[0] === 'Ouzeyduboiz' ? 'ouzey-name' : undefined}>
                   {p[0]}
                   {p[2] && <span className="flag"> {p[2]}</span>}
                 </h3>
@@ -320,8 +327,17 @@ export default function Home() {
             <div className="spotify-release">
               <p className="eyebrow">LATEST RELEASE</p>
               <iframe
-                src="https://open.spotify.com/embed/track/4IDqH6PiymDde1hNIQzCW7?utm_source=generator"
+                src="https://open.spotify.com/embed/track/6K0So5cAhHU3lNpxa9k1Mk?utm_source=generator"
                 title="Latest Hardbaze release on Spotify"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
+            <div className="spotify-release">
+              <p className="eyebrow">RECENT RELEASE</p>
+              <iframe
+                src="https://open.spotify.com/embed/track/4IDqH6PiymDde1hNIQzCW7?utm_source=generator"
+                title="Recent Hardbaze release on Spotify"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
               />
