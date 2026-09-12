@@ -10,6 +10,7 @@ const services = [
 ];
 const people = [
   ['ABIDOX KO', 'Member', 'HARDBAZE', '/images/abidox_ko_1789220231558.jpg'],
+  ['ABIDOX KO', 'Member', 'HARDBAZE', '/images/abidox_ko_1789220193669.jpg'],
   ['PERMA MUSIC', 'Member', 'HARDBAZE', '/images/permamusic_1789220366224.jpg'],
   [
     'SHARP OFFICIAL',
@@ -18,11 +19,20 @@ const people = [
     '/images/sharp_official10_1789220316706.jpg',
   ],
   [
+    'SHARP OFFICIAL',
+    'Member',
+    'HARDBAZE',
+    '/images/sharp_official10_1789220318232.jpg',
+  ],
+  [
     'HARDBAZE MEMBER',
     'Member',
     'HARDBAZE',
     '/images/WhatsApp Image 2026-01-27 at 23.13.14.jpeg',
   ],
+  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/FB_IMG_1788811626598.jpg'],
+  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/FB_IMG_1788811605285.jpg'],
+  ['HARDBAZE MEMBER', 'Member', 'HARDBAZE', '/images/IMG_1764.JPG'],
 ];
 const tracks = [
   ['After Hours', 'AMARÉ', 'AFRO-FUSION', '03:42'],
@@ -228,7 +238,7 @@ export default function Home() {
         <div className="crew">
           {shown.length ? (
             shown.map((p) => (
-              <article key={p[0]}>
+              <article key={p[3]}>
                 <img src={p[3]} alt={'Portrait of ' + p[0]} loading="lazy" />
                 <p>
                   {p[1]} <span>↗</span>
