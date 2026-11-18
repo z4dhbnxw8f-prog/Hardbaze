@@ -1,6 +1,7 @@
 'use client';
 import { useForm, ValidationError } from '@formspree/react';
 import { FormEvent, useEffect, useState } from 'react';
+import {ThemeToggle, Marquee, HeroSticker, ArtistPortrait, MusicDock} from '../components/label-experience';
 const services = [
   ['Recording', 'Capture a performance with clarity and feeling.'],
   ['Mixing & Mastering', 'Make every detail translate.'],
@@ -63,7 +64,7 @@ export default function Home() {
         body: JSON.stringify({ email: newsletterEmail }),
       });
 
-      const data = await response.json();
+      const data = await response.json() as { error?: string };
 
       if (!response.ok) {
         throw new Error(data.error || 'Unable to subscribe right now.');
@@ -119,6 +120,7 @@ export default function Home() {
         <button className="menu" onClick={() => setMenu(!menu)}>
           {menu ? 'CLOSE' : 'MENU'}
         </button>
+        <ThemeToggle />
         <nav className={menu ? 'open' : ''}>
           {[
             'Studio',
@@ -172,8 +174,10 @@ export default function Home() {
             </a>
           </div>
         </div>
+        <HeroSticker />
         <div className="wave">||||||||||||||||||||||||||||||||</div>
       </section>
+      <Marquee names={Array.from(new Set(people.map(p => p[0])))} />
       <section id="studio" className="studio section">
         <div>
           <p className="eyebrow orange">01 — THE STUDIO</p>
@@ -297,9 +301,9 @@ export default function Home() {
         </div>
         <div className="crew">
           {shown.length ? (
-            shown.map((p) => (
+            shown.map((p, index) => (
               <article key={p[3]}>
-                <img src={p[3]} alt={'Portrait of ' + p[0]} loading="lazy" />
+                <ArtistPortrait person={p} index={index} />
                 <p>
                   {p[1].split('|').join(' · ')} <span>↗</span>
                 </p>
@@ -777,6 +781,7 @@ export default function Home() {
         </div>
         <small>© 2026 Hardbaze. All rights reserved. Privacy · Impressum</small>
       </footer>
+      <MusicDock />
     </main>
   );
 }

@@ -5,7 +5,8 @@ const BREVO_LIST_ID = process.env.BREVO_LIST_ID;
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json();
+    const payloadInput = await request.json();
+    const email = payloadInput && typeof payloadInput === 'object' && 'email' in payloadInput ? payloadInput.email : undefined;
 
     if (!email || typeof email !== 'string' || !email.trim()) {
       return NextResponse.json(
