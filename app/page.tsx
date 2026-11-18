@@ -547,10 +547,6 @@ export default function Home() {
               <input required name="name" placeholder="Your full name" />
             </label>
             <label>
-              Artist / stage name
-              <input required name="stage_name" placeholder="How should we know you?" />
-            </label>
-            <label>
               Email
               <input required type="email" name="email" placeholder="you@email.com" />
               <ValidationError field="email" prefix="Email" errors={state.errors} />
