@@ -1289,3 +1289,17 @@ h2 i { color:var(--wine);font-family:inherit;font-style:normal;font-weight:inher
 }
 @media(prefers-reduced-motion:reduce) { .zine-marquee > div { animation:none; }.crew article,.studioimg,.video-preview,.testimonial-grid article,.heroimg { transform:none!important; }.portrait-overlay { transition:none; } }
 @media(hover:hover) { .spotify-release iframe,.video-preview { cursor:crosshair; } }
+
+/* Keep artist dialogs independent of rotated roster cards. */
+.artist-backdrop { overflow-y:auto;overscroll-behavior:contain;padding:24px; }
+.artist-sheet { grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-height:calc(100svh - 48px);margin:auto;isolation:isolate; }
+.artist-sheet > div { min-width:0; }
+.artist-sheet > img { min-height:0;aspect-ratio:auto;transform:none; }
+.artist-sheet .sheet-close { position:sticky;top:12px;grid-column:1/-1;justify-self:end;margin:12px 12px -46px 0;width:38px;height:38px; }
+.artist-sheet .button { display:inline-block;line-height:1.6; }
+@media(max-width:760px) {
+ .artist-backdrop { padding:16px; }
+ .artist-sheet { grid-template-columns:minmax(0,1fr);max-height:calc(100svh - 32px); }
+ .artist-sheet > img { height:240px;max-height:35svh; }
+ .artist-sheet > div { padding:24px; }
+}
